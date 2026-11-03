@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.StudentPracticeRecordsMapper">
+    
+    <resultMap type="StudentPracticeRecords" id="StudentPracticeRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="studentName"    column="student_name"    />
+        <result property="isCompleted"    column="is_completed"    />
+        <result property="practiceDate"    column="practice_date"    />
+        <result property="remark"    column="remark"    />
+        <result property="createdAt"    column="created_at"    />
+    </resultMap>
+
+    <sql id="selectStudentPracticeRecordsVo">
+        select id, student_name, is_completed, practice_date, remark, created_at from student_practice_records
+    </sql>
+
+    <select id="selectStudentPracticeRecordsList" parameterType="StudentPracticeRecords" resultMap="StudentPracticeRecordsResult">
+        <include refid="selectStudentPracticeRecordsVo"/>
+        <where>  
+            <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
+            <if test="isCompleted != null "> and is_completed = #{isCompleted}</if>
+            <if test="params.beginPracticeDate != null and params.beginPracticeDate != '' and params.endPracticeDate != null and params.endPracticeDate != ''"> and practice_date between #{params.beginPracticeDate} and #{params.endPracticeDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectStudentPracticeRecordsById" parameterType="Long" resultMap="StudentPracticeRecordsResult">
+        <include refid="selectStudentPracticeRecordsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudentPracticeRecords" parameterType="StudentPracticeRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into student_practice_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="isCompleted != null">is_completed,</if>
+            <if test="practiceDate != null">practice_date,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createdAt != null">created_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="isCompleted != null">#{isCompleted},</if>
+            <if test="practiceDate != null">#{practiceDate},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStudentPracticeRecords" parameterType="StudentPracticeRecords">
+        update student_practice_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="isCompleted != null">is_completed = #{isCompleted},</if>
+            <if test="practiceDate != null">practice_date = #{practiceDate},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStudentPracticeRecordsById" parameterType="Long">
+        delete from student_practice_records where id = #{id}
+    </delete>
+
+    <delete id="deleteStudentPracticeRecordsByIds" parameterType="String">
+        delete from student_practice_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

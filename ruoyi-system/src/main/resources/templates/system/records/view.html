@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('课堂记录详细')" />
+</head>
+<body>
+    <div class="main-content">
+        <form class="form-horizontal" th:object="${studentPracticeRecords}">
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">学生姓名：</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext" th:text="*{studentName}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">是否完成：1-已完成，0-未完成：</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext" th:text="*{@dict.getLabel('is_comp', isCompleted)}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">练习日期：</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext" th:text="*{#dates.format(practiceDate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">备注：</label>
+                        <div class="col-sm-8">
+                            <p class="form-control-plaintext" th:text="*{remark}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+</body>
+</html>
