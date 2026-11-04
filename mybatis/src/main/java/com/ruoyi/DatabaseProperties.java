@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-/** Reads private connection settings without embedding credentials in source. */
 final class DatabaseProperties {
     private DatabaseProperties() { }
 
