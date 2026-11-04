@@ -69,8 +69,10 @@ try {
     }
     $destination = "$user@$server"
     Write-Host '[2/4] Uploading release...'
+    $remoteScript = Join-Path $temp 'deploy-remote.sh'
+    [IO.File]::WriteAllText($remoteScript, [IO.File]::ReadAllText((Join-Path $root 'scripts/deploy-remote.sh')).Replace("`r`n", "`n"), $utf8)
     Run 'ssh.exe' (@('-n','-p',$port) + $options + @($destination,"umask 077; mkdir -p '$stage'"))
-    Run 'scp.exe' (@('-P',$port) + $options + @($jar,(Join-Path $temp '.env'),(Join-Path $root 'scripts/deploy-remote.sh'),"${destination}:$stage/"))
+    Run 'scp.exe' (@('-P',$port) + $options + @($jar,(Join-Path $temp '.env'),$remoteScript,"${destination}:$stage/"))
     Write-Host '[3/4] Verifying, backing up, restarting and checking health...'
     Run 'ssh.exe' (@('-n','-p',$port) + $options + @($destination,"bash '$stage/deploy-remote.sh' '$appDir' '$service' '$healthPort' '$release' '$hash'"))
     Write-Host '[4/4] Checking public login page...'

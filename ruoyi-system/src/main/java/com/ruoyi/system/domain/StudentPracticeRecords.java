@@ -20,6 +20,11 @@ public class StudentPracticeRecords extends BaseEntity
     /** 主键，自动增长 */
     private Long id;
 
+    @Excel(name = "第几排")
+    private Integer seatRow;
+    public Integer getSeatRow() { return seatRow; }
+    public void setSeatRow(Integer seatRow) { this.seatRow = seatRow; }
+
     /** 学生姓名 */
     @Excel(name = "学生姓名")
     private String studentName;

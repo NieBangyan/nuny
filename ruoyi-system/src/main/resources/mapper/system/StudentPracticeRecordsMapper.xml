@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="StudentPracticeRecords" id="StudentPracticeRecordsResult">
         <result property="id"    column="id"    />
+        <result property="seatRow" column="seat_row" />
         <result property="studentName"    column="student_name"    />
         <result property="isCompleted"    column="is_completed"    />
         <result property="practiceDate"    column="practice_date"    />
@@ -14,7 +15,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStudentPracticeRecordsVo">
-        select id, student_name, is_completed, practice_date, remark, created_at from student_practice_records
+        select id, student_name, is_completed, practice_date, remark, created_at,
+        (select s.seat_row from classroom_student s where s.student_name=student_practice_records.student_name limit 1) as seat_row
+        from student_practice_records
     </sql>
 
     <select id="selectStudentPracticeRecordsList" parameterType="StudentPracticeRecords" resultMap="StudentPracticeRecordsResult">
