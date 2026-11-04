@@ -12,6 +12,7 @@ import com.ruoyi.system.mapper.ClassroomReportMapper;
 @RequestMapping("/system/classroom")
 public class ClassroomReportController {
     @Autowired private ClassroomReportMapper mapper;
+    @Autowired private com.ruoyi.system.service.IStudentPracticeRecordsService records;
 
     @GetMapping("/report")
     @RequiresPermissions("system:records:list")
@@ -23,12 +24,18 @@ public class ClassroomReportController {
 
     @PostMapping("/students")
     @RequiresPermissions("system:records:add")
-    public AjaxResult add(@RequestParam String name, @RequestParam int row) {
+    public AjaxResult add(@RequestParam String name, @RequestParam int row, @RequestParam String date) {
+        try { LocalDate.parse(date); }
+        catch (RuntimeException e) { return AjaxResult.error("请选择有效日期"); }
         name = name.trim();
         if (name.isEmpty() || name.length() > 50 || row < 1 || row > 100)
             return AjaxResult.error("姓名为1至50字，排号为1至100");
-        try { mapper.add(name, row); }
-        catch (DuplicateKeyException e) { return AjaxResult.error("该姓名已存在；同名学生请添加学号后缀区分"); }
+        com.ruoyi.system.domain.StudentPracticeRecords record = new com.ruoyi.system.domain.StudentPracticeRecords();
+        record.setStudentName(name);
+        record.setSeatRow(row);
+        record.setPracticeDate(java.sql.Date.valueOf(date));
+        record.setIsCompleted(0);
+        records.insertStudentPracticeRecords(record);
         return AjaxResult.success();
     }
 

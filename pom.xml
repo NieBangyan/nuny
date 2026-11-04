@@ -196,6 +196,7 @@
     </dependencyManagement>
 
     <modules>
+        <module>mybatis</module>
         <module>ruoyi-admin</module>
         <module>ruoyi-framework</module>
         <module>ruoyi-system</module>

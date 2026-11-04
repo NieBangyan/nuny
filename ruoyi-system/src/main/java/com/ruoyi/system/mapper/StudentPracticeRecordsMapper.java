@@ -1,6 +1,7 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import java.util.Map;
 import com.ruoyi.system.domain.StudentPracticeRecords;
 
 /**
@@ -11,6 +12,8 @@ import com.ruoyi.system.domain.StudentPracticeRecords;
  */
 public interface StudentPracticeRecordsMapper 
 {
+    List<Map<String, Object>> selectStudentChart();
+
     /**
      * 查询课堂记录
      * 

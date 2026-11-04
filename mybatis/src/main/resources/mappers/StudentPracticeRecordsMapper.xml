@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.StudentPracticeRecordsMapper">
+    <select id="selectRecords" resultType="StudentPracticeRecord" timeout="10">
+        SELECT id, student_name, is_completed, practice_date, remark
+        FROM student_practice_records
+        ORDER BY practice_date DESC, id DESC
+        LIMIT 100
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.ruoyi.system.service;
 
 import java.util.List;
+import java.util.Map;
 import com.ruoyi.system.domain.StudentPracticeRecords;
 
 /**
@@ -11,6 +12,9 @@ import com.ruoyi.system.domain.StudentPracticeRecords;
  */
 public interface IStudentPracticeRecordsService 
 {
+    /** 按学生汇总完成次数，每人每天取最新记录。 */
+    List<Map<String, Object>> studentChart();
+
     /**
      * 查询课堂记录
      * 

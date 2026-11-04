@@ -22,10 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectStudentPracticeRecordsList" parameterType="StudentPracticeRecords" resultMap="StudentPracticeRecordsResult">
         <include refid="selectStudentPracticeRecordsVo"/>
-        <where>  
+        <where> id = (select max(latest.id) from student_practice_records latest where latest.student_name=student_practice_records.student_name and DATE(latest.practice_date)=DATE(student_practice_records.practice_date))  
             <if test="studentName != null  and studentName != ''"> and student_name like concat('%', #{studentName}, '%')</if>
             <if test="isCompleted != null "> and is_completed = #{isCompleted}</if>
-            <if test="params.beginPracticeDate != null and params.beginPracticeDate != '' and params.endPracticeDate != null and params.endPracticeDate != ''"> and practice_date between #{params.beginPracticeDate} and #{params.endPracticeDate}</if>
+            <if test="params.beginPracticeDate != null and params.beginPracticeDate != ''"> and practice_date &gt;= #{params.beginPracticeDate}</if>
+            <if test="params.endPracticeDate != null and params.endPracticeDate != ''"> and practice_date &lt; DATE_ADD(#{params.endPracticeDate}, INTERVAL 1 DAY)</if>
         </where>
     </select>
     
@@ -75,4 +76,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="selectStudentChart" resultType="java.util.LinkedHashMap">
+        SELECT p.student_name AS stuname,
+               SUM(CASE WHEN p.is_completed = 1 THEN 1 ELSE 0 END) AS comp,
+               SUM(CASE WHEN p.is_completed = 0 THEN 1 ELSE 0 END) AS ncomp
+        FROM student_practice_records p
+        WHERE p.id = (
+            SELECT MAX(latest.id)
+            FROM student_practice_records latest
+            WHERE latest.student_name = p.student_name
+              AND DATE(latest.practice_date) = DATE(p.practice_date)
+        )
+        GROUP BY p.student_name
+        ORDER BY p.student_name
+    </select>
 </mapper>
